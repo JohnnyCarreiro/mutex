@@ -1,0 +1,26 @@
+FROM almalinux:9
+
+# Base image updates
+RUN dnf update -y && \
+    dnf install -y epel-release
+
+# Install Chromium
+RUN dnf install -y chromium-common chromium-headless && \
+    dnf install unzip -y
+
+# Prepare App
+RUN mkdir /app
+COPY .nvmrc /app
+WORKDIR /app
+
+# Install nvm - remove if no node specif feature needed
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash
+
+# Install Bun - remove if there is node specific features needed
+RUN curl -fsSL https://bun.sh/install | bash
+
+# Install Node - remove if no node specif feature needed
+RUN bash -l -c 'nvm install'
+
+EXPOSE 3000/tcp
+CMD ["/bin/bash"]
