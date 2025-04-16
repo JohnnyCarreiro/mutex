@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+This is a [Next.js](https://nextjs.org) project created to test how to conntrol and manage
+costly resources with [Mutex](https://github.com/johnnycarreiro/mutex).
+
+For this test lest's use [puppeteer](https://pptr.dev/) and create a single instance for it besides a custom [Mutex](https://github.com/johnnycarreiro/mutex)
+intance to control max resource allocation.
 
 ## Getting Started
 
 First, run the development server:
+Use the  following commnads to run it locally on your host machine
 
 ```bash
 npm run dev
-# or
-yarn dev
 # or
 pnpm dev
 # or
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Use the following commands to run it on a docker container:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run docker:dev:shell
+# or
+pnpm run docker:dev:shell
+# or
+bun run docker:dev:shell
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Before running the commands above, make sure you have [Docker](https://www.docker.com/) installed on your machine.
+And you have built the image with the command `npm run docker:dev:build`
 
-## Learn More
+### Useful test commands:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+# Run all tests
+pnpm test
+# Run all tests with coverage
+pnpm test --coverage
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# Run a manual test to api end point
+curl -X POST -o foobar.png -d '{"url": "http://consolidados.digital", "width": 1000, "height": 1000, "deviceScaleFactor": 1}' -H 'Content-Type:a
+pplication/json' http://localhost:3000/api/render
+```
