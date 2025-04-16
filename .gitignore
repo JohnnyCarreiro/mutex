@@ -10,6 +10,7 @@
 !.yarn/releases
 !.yarn/versions
 /chrome
+chrome/
 
 # testing
 /coverage
