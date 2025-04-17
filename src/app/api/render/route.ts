@@ -1,3 +1,4 @@
+import { browserPool } from "@/lib/BrowserPool";
 import { NextResponse } from "next/server";
 import puppeteer from "puppeteer-core";
 
@@ -11,32 +12,24 @@ import puppeteer from "puppeteer-core";
 export async function POST(request: Request): Promise<NextResponse> {
   const { url, width, height, deviceScaleFactor } = await request.json();
 
-  const chromiumPath =
-    process.platform === "linux"
-      ? "/usr/lib64/chromium-browser/headless_shell"
-      : "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
+  const page = await browserPool.requirePage();
+  let screenshot: Uint8Array;
 
-  // FIXME: Put it onto a environment config file
-  // FIXME: Crete only one instance of browser and reuse it for entire live cicle
-  const browser = await puppeteer.launch({
-    executablePath: chromiumPath,
-    headless: true,
-    args: ["--no-sandbox"],
-  });
+  try {
+    page.setViewport({
+      width,
+      height,
+      deviceScaleFactor,
+    });
 
-  const page = await browser.newPage();
-  page.setViewport({
-    width,
-    height,
-    deviceScaleFactor,
-  });
+    await page.goto(url);
+    await page.waitForNetworkIdle();
 
-  await page.goto(url);
-  await page.waitForNetworkIdle();
-
-  const screenshot = await page.screenshot({ encoding: "binary" });
-  await browser.close();
-
+    screenshot = await page.screenshot({ encoding: "binary" });
+  } finally {
+    await browserPool.releasePage(page);
+    // await browser.close();
+  }
   // return NextResponse.json({ ok: true });
   return new NextResponse(screenshot, {
     status: 200,

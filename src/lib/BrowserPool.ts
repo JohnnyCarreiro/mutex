@@ -6,7 +6,7 @@ class BrowserPool {
   private releasedPages: Page[] = [];
   private requiredPages: Page[] = [];
 
-  // FIXME: implement Queue for max page allocation
+  // TODO: implement Queue for max page allocation
   // biome-ignore lint/complexity/noUselessConstructor: <explanation>
   constructor() {}
 
